@@ -6,47 +6,43 @@ public class Follow : MonoBehaviour
 {
     public GameObject target;
     public float followDistance;
+    public Vector3 followOffset;
     public float cameraFollowSpeed = 0.1f;
-    public Vector3 speed;
+    public float cameraRotationSpeed = 1.0f;
+    
+    //Vector3 cameraTargetPosition = CalculateCameraTargetPosition();
+    Vector3 CaculateCameraTargetPosition()
+    {
+        Vector3 targetPosition = target.transform.position;
+
+        Vector3 followVector = transform.forward * -followDistance;
+
+        Vector3 cameraTargetPosition = targetPosition + followVector + followOffset;
+
+        return cameraTargetPosition;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        Vector3 targetPosition = target.transform.position;
+        transform.position = CaculateCameraTargetPosition();
 
-        Vector3 followVector = transform.forward * -followDistance;
-
-        transform.position = targetPosition + followVector;
+        transform.rotation = Quaternion.LookRotation(target.transform.forward);
     }
 
     // Update is called once per frame
     void Update()
-    {
-        Vector3 currentSpeed = Vector3.zero;
-        
-        Vector3 targetPosition = target.transform.position;
-
-        Vector3 followVector = transform.forward * -followDistance;
-
-        Vector3 cameraTargetPosition = targetPosition + followVector;
+    {    
+        Vector3 cameraTargetPosition = CaculateCameraTargetPosition();
 
         transform.position = Vector3.Lerp(transform.position, cameraTargetPosition, cameraFollowSpeed * Time.deltaTime);
 
-         Vector3 targetDir = target.position - transform.position;
-        float angle = Vector3.Angle(targetDir, transform.up);
-        
-        if (angle < 5.0f)
-        {
-            print("close");
-        }
-        if (Input.GetKey(KeyCode.LeftArrow))
-       {
-           currentSpeed.x = -speed.x;
-       }
-        if (Input.GetKey(KeyCode.RightArrow))
-       {
-           currentSpeed.x = speed.x;
-       }
+        //Which way is the capsule facing - target.transform.forward
+        Vector3 targetForward = target.transform.forward;
+
+        //Taking the camera direction and slowly rotating towards the capsule forawrd
+        Vector3 direction = Vector3.RotateTowards(transform.forward, targetForward, cameraRotationSpeed * Time.deltaTime, 0.0f);
+
+        transform.rotation = Quaternion.LookRotation(direction);
     }
-        
 }
