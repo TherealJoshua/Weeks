@@ -17,13 +17,16 @@ public class Bullet : MonoBehaviour
     {
         //When 3 seconds has past, delete me
         //Hint: Time.deltaTime
-        lifeSpan += Time.deltaTime;
-        currentLife = lifeSpan * Time.deltaTime;
+        lifeSpan -= Time.deltaTime;
+        if (currentLife <= 0.0f)
+        {
+            Destroy(GameObject.Bullet);
+        }
         //Destroy(this);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-    Destroy(GameObject(Bullet));
+    Destroy(gameObject.Bullet);
     }
 }
