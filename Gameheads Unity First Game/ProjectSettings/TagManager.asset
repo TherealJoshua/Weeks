@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Capsule_Player
   - CapsulePlayer
+  - Coin
+  - Patrol
   layers:
   - Default
   - TransparentFX
@@ -18,7 +20,7 @@ TagManager:
   - Ground
   - Player
   - Bullet
-  - 
+  - Object
   - 
   - 
   - 
